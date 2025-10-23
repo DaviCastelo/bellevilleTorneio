@@ -185,11 +185,11 @@ export default function RachaPage() {
     }));
 
     const partidasIniciais = gerarPartidasIniciais(timesComStatsZeradas);
-    const novoTorneio = {
+    const novoTorneio: Torneio = {
       ...torneio,
       times: timesComStatsZeradas,
       partidas: partidasIniciais,
-      faseAtual: 'inicial',
+      faseAtual: 'inicial' as const,
       iniciado: true
     };
 
@@ -211,7 +211,7 @@ export default function RachaPage() {
       // Avança para semifinais
       const partidasSemifinais = gerarPartidasSemifinais(torneio.times);
       novoTorneio.partidas = [...torneio.partidas, ...partidasSemifinais];
-      novoTorneio.faseAtual = 'semifinal';
+      novoTorneio.faseAtual = 'semifinal' as const;
       novaFase = 'semifinal';
     } else if (fase === 'semifinal') {
       // Avança para final
@@ -223,7 +223,7 @@ export default function RachaPage() {
         console.log('Criando partidas da final...');
         const partidasFinal = gerarPartidasFinal(vencedores[0], vencedores[1]);
         novoTorneio.partidas = [...torneio.partidas, ...partidasFinal];
-      novoTorneio.faseAtual = 'final';
+      novoTorneio.faseAtual = 'final' as const;
       novaFase = 'final';
         console.log('Final criada com sucesso!');
       } else {
@@ -234,7 +234,7 @@ export default function RachaPage() {
       const campeao = obterCampeaoFinal(torneio.partidas);
       if (campeao) {
         novoTorneio.campeao = campeao;
-      novoTorneio.faseAtual = 'concluido';
+      novoTorneio.faseAtual = 'concluido' as const;
       novaFase = 'concluido';
       }
     }
@@ -401,7 +401,7 @@ export default function RachaPage() {
     return torneio?.times.find(t => t.id === timeId);
   };
 
-  const getPartidasDaFase = (faseAtual: string) => {
+  const getPartidasDaFase = (faseAtual: 'inicial' | 'semifinal' | 'final' | 'concluido') => {
     if (!torneio) return [];
     
     if (faseAtual === 'inicial') {
