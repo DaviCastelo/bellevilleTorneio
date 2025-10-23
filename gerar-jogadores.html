@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Jogadores - Gerenciador de Racha</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00A859;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .btn {
+            background: #00A859;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #008a4a;
+        }
+        .jogadores-list {
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .jogador {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .jogador:last-child {
+            border-bottom: none;
+        }
+        .nivel {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .nivel-1 { background: #ef4444; }
+        .nivel-2 { background: #f97316; }
+        .nivel-3 { background: #eab308; }
+        .nivel-4 { background: #3b82f6; }
+        .nivel-5 { background: #10b981; }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚽ Gerar Jogadores para Teste</h1>
+        
+        <p>Este gerador criará 20 jogadores aleatórios com níveis variados para você testar o sistema de racha.</p>
+        
+        <button class="btn" onclick="gerarJogadores()">
+            🎲 Gerar 20 Jogadores Aleatórios
+        </button>
+        
+        <div id="resultado"></div>
+        <div id="jogadores-container" class="jogadores-list" style="display: none;"></div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/" class="btn" style="text-decoration: none; display: inline-block;">
+                🏠 Voltar para o Sistema
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function gerarJogadores() {
+            const nomes = [
+                'João', 'Pedro', 'Carlos', 'Lucas', 'Gabriel', 'Rafael', 'Felipe', 'Diego', 'Bruno', 'André',
+                'Marcos', 'Thiago', 'Daniel', 'Rodrigo', 'Eduardo', 'Fernando', 'Gustavo', 'Leonardo', 'Vinicius', 'Matheus'
+            ];
+
+            const sobrenomes = [
+                'Silva', 'Santos', 'Oliveira', 'Souza', 'Rodrigues', 'Ferreira', 'Alves', 'Pereira', 'Lima', 'Gomes',
+                'Costa', 'Ribeiro', 'Martins', 'Carvalho', 'Almeida', 'Lopes', 'Soares', 'Fernandes', 'Vieira', 'Barbosa'
+            ];
+
+            const apelidos = [
+                'Ney', 'Pelé', 'Ronaldinho', 'Kaká', 'Ronaldo', 'Romário', 'Zico', 'Sócrates', 'Falcão', 'Garrincha',
+                'Tostão', 'Jairzinho', 'Rivelino', 'Carlos Alberto', 'Didi', 'Vavá', 'Mário', 'Ademir', 'Leônidas', 'Domingos'
+            ];
+
+            const niveis = [1, 2, 3, 4, 5];
+            const probabilidades = [0.1, 0.2, 0.4, 0.2, 0.1]; // 10% nível 1, 20% nível 2, 40% nível 3, 20% nível 4, 10% nível 5
+
+            function gerarNivel() {
+                const random = Math.random();
+                let acumulado = 0;
+                
+                for (let i = 0; i < niveis.length; i++) {
+                    acumulado += probabilidades[i];
+                    if (random <= acumulado) {
+                        return niveis[i];
+                    }
+                }
+                return 3; // fallback
+            }
+
+            function gerarJogador() {
+                const nome = nomes[Math.floor(Math.random() * nomes.length)];
+                const sobrenome = sobrenomes[Math.floor(Math.random() * sobrenomes.length)];
+                const temApelido = Math.random() < 0.7; // 70% chance de ter apelido
+                const apelido = temApelido ? apelidos[Math.floor(Math.random() * apelidos.length)] : undefined;
+                
+                // Gerar WhatsApp brasileiro
+                const ddd = Math.floor(Math.random() * 90) + 10; // 10-99
+                const numero = Math.floor(Math.random() * 900000000) + 100000000; // 100000000-999999999
+                const whatsapp = `(${ddd}) ${numero.toString().slice(0, 5)}-${numero.toString().slice(5)}`;
+                
+                return {
+                    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                    nome,
+                    sobrenome,
+                    apelido,
+                    whatsapp,
+                    nivel: gerarNivel(),
+                    gols: 0,
+                    assistencias: 0,
+                    golsTotal: 0,
+                    assistenciasTotal: 0
+                };
+            }
+
+            // Gerar 20 jogadores
+            const jogadores = [];
+            for (let i = 0; i < 20; i++) {
+                jogadores.push(gerarJogador());
+            }
+
+            // Salvar no localStorage
+            localStorage.setItem('jogadores', JSON.stringify(jogadores));
+            
+            // Mostrar resultado
+            document.getElementById('resultado').innerHTML = `
+                <div class="success">
+                    ✅ 20 jogadores criados e salvos com sucesso!<br>
+                    Agora você pode voltar ao sistema e testar o racha.
+                </div>
+            `;
+
+            // Mostrar lista de jogadores
+            const container = document.getElementById('jogadores-container');
+            container.style.display = 'block';
+            container.innerHTML = jogadores.map(jogador => `
+                <div class="jogador">
+                    <div>
+                        <strong>${jogador.nome} ${jogador.sobrenome}</strong>
+                        ${jogador.apelido ? `"${jogador.apelido}"` : ''}
+                        <br>
+                        <small>${jogador.whatsapp}</small>
+                    </div>
+                    <div>
+                        <span class="nivel nivel-${jogador.nivel}">Nível ${jogador.nivel}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            console.log('Jogadores gerados:', jogadores);
+        }
+    </script>
+</body>
+</html>
