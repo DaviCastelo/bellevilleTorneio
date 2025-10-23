@@ -538,7 +538,7 @@ export default function RachaPage() {
               Nenhum torneio encontrado
             </h3>
             <p className="text-gray-600 mb-4">
-              Vá para a aba "Seleção" para sortear os times primeiro
+              Vá para a aba &quot;Seleção&quot; para sortear os times primeiro
             </p>
             <a href="/selecao" className="btn-primary">
               Ir para Seleção

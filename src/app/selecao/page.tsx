@@ -286,7 +286,7 @@ export default function SelecaoPage() {
                 Nenhum jogador cadastrado
               </h3>
               <p className="text-gray-600 mb-4">
-                Cadastre jogadores na aba "Jogadores" primeiro
+                Cadastre jogadores na aba &quot;Jogadores&quot; primeiro
               </p>
               <a
                 href="/"
